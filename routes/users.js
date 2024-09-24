@@ -21,25 +21,20 @@ router.post("/login", (req, res) => {
       res.status(404).json({ message: "email 또는 비밀번호가 틀렸습니다" });
     }
   });
-
-  //{}가 있을 때는 값이 없어도 if문에서 있는거로 취급함
 });
 //회원 가입
 router.post("/signup", (req, res) => {
   //req.body에 아무것도 안넣고 보내도 {}로 나옴
-
+  //{}가 있을 때는 값이 없어도 if문에서 있는거로 취급함if(req.body)했을 떄
   if (req.body == {}) {
     res.status(400).json({ message: `body의 값이 유효하지 않은 내용입니다` });
   } else {
-    const { email, name, pwd, contact } = req.body;
-    console.log(email, name, pwd, contact);
+    const { email, name, password, contact } = req.body;
+    console.log(email, name, password, contact);
     //여러 개의 문자열을 한번에 묶에서 보내려고 배열에 묶어서 보냄
-    let sql = `INSET INTO users ( email, name, pwd, contact) VALUES (?, ?, ?, ?)`;
-    let values = [email, name, pwd, contact];
-    conn.query(sql, values, function (err, results, fields) {
-      //INSERT를 하면 results를 따로 안돌려줌
-      // console.log(results.length);
-
+    let sql = `INSERT INTO users ( email, name, password, contact) VALUES (?, ?, ?, ?)`;
+    let values = [email, name, password, contact];
+    conn.query(sql, values, function (err, results) {
       res.status(201).json(results);
     });
   }
@@ -53,7 +48,7 @@ router
 
     //email에 들어갈 애가 ?에 들어감
     let sql = `SELECT * FROM users Where email = ?`;
-    conn.query(sql, email, function (err, results, fields) {
+    conn.query(sql, email, function (err, results) {
       res.status(200).json(results);
     });
   })
@@ -65,7 +60,7 @@ router
     conn.query(
       `DELETE FROM users Where email = ?`,
       email,
-      function (err, results, fields) {
+      function (err, results) {
         // console.log(results.length); //1
         console.log(results);
         res.status(200).json(results);

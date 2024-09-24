@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 app.listen(1818);
-//json모듈 미들웨어 설정
+//http외의 모듈 => json모듈 미들웨어 설정
 app.use(express.json());
 const userRouter = require("./routes/users");
 const channelRouter = require("./routes/channels");
